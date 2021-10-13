@@ -57,8 +57,9 @@ public final class NIOSSHHandler {
 
     private var pendingGlobalRequestResponses: CircularBuffer<PendingGlobalRequestResponse?>
 
-    public init(role: SSHConnectionRole, allocator: ByteBufferAllocator, inboundChildChannelInitializer: ((Channel, SSHChannelType) -> EventLoopFuture<Void>)?) {
-        self.stateMachine = SSHConnectionStateMachine(role: role)
+    public init(role: SSHConnectionRole, allocator: ByteBufferAllocator,
+                inboundChildChannelInitializer: ((Channel, SSHChannelType) -> EventLoopFuture<Void>)?) {
+        self.stateMachine = SSHConnectionStateMachine(role: role, protectionSchemes: role.transportProtectionSchemes)
         self.pendingWrite = false
         self.outboundFrameBuffer = allocator.buffer(capacity: 1024)
         self.pendingChannelInitializations = CircularBuffer(initialCapacity: 4)
